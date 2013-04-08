@@ -30,6 +30,7 @@ public class MainActivity extends Activity implements OnClickListener{
 	
 	private ResourceFileManager m_resource_manager;
 	
+	// for test
 	private int[] reskeys = {1364993314, 1365316297, 1365321200, 1365321271, 1365322296};
 
 	@Override
