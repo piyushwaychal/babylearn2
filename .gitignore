@@ -6,3 +6,14 @@
 *.ear
 *.apk
 *.class
+*.ap_
+
+bin/
+gen/
+
+local.properties
+.project
+.metadata
+.classpath
+.settings/
+.loadpath
