@@ -11,6 +11,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -21,7 +22,7 @@ import android.widget.ImageView;
  *  the activity for rendering content and animation to user
  *  this activity contains a animation, a sound , and some navigation buttons
  */
-public class MainActivity extends Activity implements OnClickListener{
+public class MainActivity extends Activity implements OnClickListener, MyGestureListener.SimpleGestureListener{
 	static final int ANIMATION_FRAME_COUNT = 8;
 	private AnimationDrawable m_animation;
 	private ImageView m_animation_holder;
@@ -29,6 +30,8 @@ public class MainActivity extends Activity implements OnClickListener{
 	private MediaPlayer m_sound_player = null;
 	
 	private ResourceFileManager m_resource_manager;
+	
+	private MyGestureListener m_gesture_listener;
 	
 	// for test
 	private int[] reskeys = {1364993314, 1365316297, 1365321200, 1365321271, 1365322296};
@@ -44,6 +47,8 @@ public class MainActivity extends Activity implements OnClickListener{
 		m_enter_button = (ImageButton) findViewById(R.id.MainGoButton);
 		m_enter_button.setOnClickListener(this);
 		
+		m_gesture_listener = new MyGestureListener(this, this);
+		
 		m_resource_manager = new ResourceFileManager(this);		
 	}
 
@@ -53,6 +58,13 @@ public class MainActivity extends Activity implements OnClickListener{
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent me){
+		this.m_gesture_listener.onTouchEvent(me);
+		return super.dispatchTouchEvent(me);
+	}
+
 
 	@Override
 	public void onClick(View v) {
@@ -68,6 +80,26 @@ public class MainActivity extends Activity implements OnClickListener{
 			startSound();
 			break;
 		}
+	}
+	
+	@Override
+	public void onSwipe(int direction) {
+		switch (direction) {
+		case MyGestureListener.SWIPE_LEFT:
+			Log.v("zhangge", "swipe left");
+			break;
+		case MyGestureListener.SWIPE_RIGHT:
+			Log.v("zhangge", "swipe right");
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	@Override
+	public void onDoubleTap() {
+		
 	}
 	
 	private void startAnimation() {
