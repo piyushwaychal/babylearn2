@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -13,9 +14,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 
 /*
@@ -33,6 +37,8 @@ public class ResourceFile extends ZipFile {
 	static final String PICTURE_FILE_EXTENSION = ".png";
 	static final String SOUND_FILE_EXTENSION = ".wav";
 	static final int ANIMATION_FRAME_COUNT = 8;
+	private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
+
 	
 	public ArrayList<String> m_animations;
 	public ArrayList<Bitmap> m_animation_bitmaps;
@@ -42,23 +48,38 @@ public class ResourceFile extends ZipFile {
 	
 	public String m_sound;
 	
+	private int m_key = 0;
+	private Context m_context = null;
+	
 	private boolean m_prepared = false;
 	
 	private BitmapFactory.Options m_options ;
+	
+	public static int copy(InputStream input, OutputStream output) throws IOException{
+	     byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
+	     int count = 0;
+	     int n = 0;
+	     while (-1 != (n = input.read(buffer))) {
+	         output.write(buffer, 0, n);
+	         count += n;
+	     }
+	     return count;
+	 }
 
-	public ResourceFile(File file, int mode) throws IOException {
+	public ResourceFile(int thiskey, File file, int mode, Context context) throws IOException {
 		super(file, mode);
-		initialize();
+		initialize(thiskey, context);
+
 	}
 
-	public ResourceFile(File file) throws ZipException, IOException {
+	public ResourceFile(int thiskey, File file, Context context) throws ZipException, IOException {
 		super(file);
-		initialize();
+		initialize(thiskey, context);
 	}
 	
-	public ResourceFile(String name) throws ZipException, IOException {
+	public ResourceFile(int thiskey, String name, Context context) throws ZipException, IOException {
 		super(name);
-		initialize();
+		initialize(thiskey, context);
 	}
 	
 	/*
@@ -92,21 +113,26 @@ public class ResourceFile extends ZipFile {
 				return false;
 			}	
 		}
-		// read sound into memory
-//		try {
-//			InputStream ins = this.getInputStream(this.getEntry(m_sound));
-//			File tempFile = File.createTempFile("_AUDIO_", ".wav");
-//	        FileOutputStream out = new FileOutputStream(tempFile);
-//	        //IOUtils.copy(ins, out);
-//		}
-//		catch (IOException e){
-//			
-//		}
+		// read sound into temp file
+		try {
+			InputStream ins = this.getInputStream(this.getEntry(m_sound));
+			File tempFile = new File(m_context.getExternalFilesDir(null), "sound.wav");
+			Log.v("zhangge", tempFile.getAbsolutePath());
+	        FileOutputStream out = new FileOutputStream(tempFile, false);
+	        copy(ins, out);
+	        out.close();
+		}
+		catch (IOException e){
+			return false;
+		}
 		m_prepared = true;
 		return true;  
 	}
 	
-	private void initialize() {
+
+	
+	
+	private void initialize(int thiskey, Context context) {
 		m_animations = new ArrayList<String>();
 		m_step_pictures = new ArrayList<String>();
 		m_animation_bitmaps = new ArrayList<Bitmap>();
@@ -116,6 +142,8 @@ public class ResourceFile extends ZipFile {
 		m_options = new BitmapFactory.Options();
 		m_options.inScaled = false;
 		m_options.inDensity = DisplayMetrics.DENSITY_HIGH;
+		setKey(thiskey);
+		m_context = context;
 		Enumeration<? extends ZipEntry> e = this.entries();
 		for(; e.hasMoreElements();) {
 			ZipEntry zn = e.nextElement();
@@ -155,6 +183,14 @@ public class ResourceFile extends ZipFile {
 			}
 		}
 		return true;
+	}
+
+	public int getKey() {
+		return m_key;
+	}
+
+	public void setKey(int m_key) {
+		this.m_key = m_key;
 	}
 	
 

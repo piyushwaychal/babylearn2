@@ -25,7 +25,7 @@ public class ResourceFileManager {
 		if (isResourceExists(key) && m_resource_dir != null) {
 			String file_name = m_resource_dir + String.valueOf(key) + ".zip";
 			try {
-				res_file =  new ResourceFile(file_name);	
+				res_file =  new ResourceFile(key, file_name, m_context);	
 			}
 			catch (Exception e) {
 				res_file = null;
