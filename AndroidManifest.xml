@@ -8,14 +8,16 @@
         android:minSdkVersion="11"
         android:targetSdkVersion="17" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
+        android:name="com.wingedstone.babylearn.MyApplication"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.wingedstone.babylearn.MainActivity"
+            android:name="com.wingedstone.babylearn.CoverActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity 
-            android:name="com.wingedstone.babylearn.PictureSlideActivity">
+            android:name="com.wingedstone.babylearn.SlidePictureActivity">
             
         </activity>
         <activity 

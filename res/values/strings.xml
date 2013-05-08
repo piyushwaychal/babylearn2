@@ -4,5 +4,7 @@
     <string name="app_name">宝宝来画画</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="menu_item_pause_on_scroll">Hello world!</string>
+    <string name="menu_item_pause_on_fling">Hello world!</string>
 
 </resources>
