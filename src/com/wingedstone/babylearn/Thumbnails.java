@@ -8,6 +8,9 @@ import org.json.JSONObject;
 import android.os.AsyncTask;
 
 public class Thumbnails {
+	static final int R_SUCCESS = 0x819;
+	static final int R_JSON_PARSE_ERROR = 0x820;
+	static final int R_EMPTY_JSON = 0x821;
 
 	public class Item {
 		public String key;
@@ -38,6 +41,7 @@ public class Thumbnails {
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
+			
 		}
 	}
 	

@@ -2,10 +2,14 @@ package com.wingedstone.babylearn;
 
 
 public class Configures {
+	
+	// server urls
 	static final String version = "0.1";
 	static final String configure_url = "http://c.wingedstone.com:8004/base/getconfig/";
 	static final String query_thumbnail_url = "http://c.wingedstone.com:8004/base/querythumbnails/%d/";
 	static final String query_item_url = "http://c.wingedstone.com:8004/base/queryitems/1/";
+	static final String upyun_zip_url = "http://babylearn.b0.upaiyun.com/%s.zip";
+	static final String get_thumbnail_url = "http://babylearn-thumbnails.b0.upaiyun.com/%s.png!half";
 	
 	//response names
 	static final String query_item_response_item_name = "items";
@@ -13,12 +17,8 @@ public class Configures {
 	
 	//intent extras
 	static final String intent_key_name = "intent_key";
-	
-	static final String upyun_zip_url = "http://babylearn.b0.upaiyun.com/%s.zip";
-	static final String get_thumbnail_url = "http://babylearn-thumbnails.b0.upaiyun.com/%s.png";
-	
-	// intent string
 	static final String res_key = "res_key";
+	static final int grid_choose_request_code = 819; 
 	
 	// URL Connection timeouts
 	static final int url_connect_timeout = 8000;

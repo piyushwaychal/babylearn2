@@ -5,6 +5,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -54,6 +55,9 @@ public class GridChooseAdapter extends BaseAdapter {
 		if (convertView == null) {
 			imageView = new ImageView(m_context);
 			imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+			imageView.setAdjustViewBounds(true);
+			//imageView.setBackgroundResource(R.drawable.grid_background);
+			imageView.setBackgroundColor(Color.rgb(230, 230, 230));
             imageView.setLayoutParams(new GridView.LayoutParams(
                     LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		} else {

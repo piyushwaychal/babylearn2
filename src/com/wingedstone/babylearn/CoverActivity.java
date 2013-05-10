@@ -20,6 +20,7 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -60,7 +61,7 @@ public class CoverActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.MainGoButton:
-			startChooseActivity();
+			startSlideActivity();
 			break;
 		case R.id.MainImageView:
 			//start animation and sound
@@ -80,7 +81,28 @@ public class CoverActivity extends Activity implements OnClickListener {
 	
 	private void startChooseActivity() {
 		Intent intent = new Intent(this, GridChooseActivity.class);
-		startActivity(intent);
+		startActivityForResult(intent, Configures.grid_choose_request_code);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		if (requestCode == Configures.grid_choose_request_code) {
+			if (resultCode == RESULT_OK) {
+				String key = intent.getStringExtra(Configures.res_key);
+				Log.v("zhangge", key == null ? "null": key);
+				changeResource(key);
+			}
+		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			startChooseActivity();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	private void startAnimation() {
