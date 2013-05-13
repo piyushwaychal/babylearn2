@@ -6,9 +6,13 @@ import com.viewpagerindicator.UnderlinePageIndicator;
 import android.R.integer;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +54,36 @@ public class SlidePictureActivity extends FragmentActivity{
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == Configures.start_camera_request_code) {
+			if (resultCode == RESULT_OK) {
+				// camera returned picture
+				// start ShareFragment , replace TakePictureFragment
+				startShareFragment(data);
+			} else {
+				// user cancelled?
+				// do nothing
+			}
+			
+		}
+		
+	}
+	
+	private void startShareFragment(Intent data) {
+		Bitmap bm = (Bitmap)data.getExtras().get("data");
+		m_view_slide_adapter.switchPicFragmentToShareFragment(bm);
+	}
+	
+	public boolean startCamera() {
+		if (! Utils.isIntentAvailable(this, MediaStore.ACTION_IMAGE_CAPTURE)) {
+			return false;
+		}
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		startActivityForResult(intent, Configures.start_camera_request_code);
+		return true;
 	}
 	
 	private class LoadResourceTask extends AsyncTask<String, Integer, ResourceFile> {

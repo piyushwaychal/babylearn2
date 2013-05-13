@@ -19,6 +19,7 @@ public class Configures {
 	static final String intent_key_name = "intent_key";
 	static final String res_key = "res_key";
 	static final int grid_choose_request_code = 819; 
+	static final int start_camera_request_code = 820;
 	
 	// URL Connection timeouts
 	static final int url_connect_timeout = 8000;
