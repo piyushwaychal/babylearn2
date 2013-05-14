@@ -39,7 +39,6 @@ public class CoverActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		// enable up button
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.activity_cover);
@@ -49,6 +48,7 @@ public class CoverActivity extends Activity implements OnClickListener {
 		m_animation_holder.setOnClickListener(this);
 		m_enter_button = (ImageButton) findViewById(R.id.MainGoButton);
 		m_enter_button.setOnClickListener(this);
+		m_enter_button.setClickable(false);
 		m_spinner = (ProgressBar) findViewById(R.id.MainprogressBar);
 		m_spinner.setVisibility(View.GONE);
 		Intent intent = getIntent();
@@ -231,6 +231,7 @@ public class CoverActivity extends Activity implements OnClickListener {
 			if (rf == null) {
 				// some thing wrong ?
 				Log.e("zhangge", "null resource file!");
+				Utils.makeToastAboutNetworkError(CoverActivity.this);
 			}
 			else {
 				CoverActivity.this.changeAnimation(rf.m_animation_bitmaps);
@@ -239,6 +240,7 @@ public class CoverActivity extends Activity implements OnClickListener {
 			}
 			CoverActivity.this.m_spinner.setVisibility(View.GONE);
 			CoverActivity.this.m_change_task = null;
+			CoverActivity.this.m_enter_button.setClickable(true);
 		}
 		
 		protected void onPreExecute() {

@@ -3,6 +3,7 @@ package com.wingedstone.babylearn;
 import java.util.ArrayList;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -54,12 +55,12 @@ public class SlidePicturePagerAdapter extends FragmentStatePagerAdapter {
 		return POSITION_UNCHANGED;
 	}
 	
-	public void switchPicFragmentToShareFragment(Bitmap bm) {
+	public void switchPicFragmentToShareFragment(Uri bitmap_uri) {
 		if (m_last_fragment != null) {
 			m_fragment_manager.beginTransaction().remove(m_last_fragment).commit();
-			m_last_fragment = ShareFragment.newInstance(bm);
+			m_last_fragment = ShareFragment.newInstance(bitmap_uri);
 			notifyDataSetChanged();
 		}
 	}
-
+	
 }

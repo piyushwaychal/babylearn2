@@ -81,7 +81,7 @@ public class GridChooseActivity extends Activity implements AdapterView.OnItemCl
 		@Override
 		protected void onPostExecute(JSONObject response) {
 			if (response == null) {  
-				
+				Utils.makeToastAboutNetworkError(GridChooseActivity.this);
 			} else {
 				MyApplication app = (MyApplication)getApplicationContext();
 				int cur_position = app.m_thumbnails.getItemCount();

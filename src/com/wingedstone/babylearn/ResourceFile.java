@@ -217,6 +217,7 @@ public class ResourceFile extends ZipFile{
 		m_prepared = false;
 		m_options = new BitmapFactory.Options();
 		m_options.inScaled = false;
+		m_options.inPreferredConfig = Bitmap.Config.RGB_565;
 		m_options.inDensity = DisplayMetrics.DENSITY_HIGH;
 		setKey(thiskey);
 		m_context = context;

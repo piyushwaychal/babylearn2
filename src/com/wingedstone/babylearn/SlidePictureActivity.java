@@ -7,6 +7,7 @@ import android.R.integer;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageSwitcher;
+import android.widget.Toast;
 import android.widget.ViewSwitcher.ViewFactory;
 
 public class SlidePictureActivity extends FragmentActivity{
@@ -28,6 +30,10 @@ public class SlidePictureActivity extends FragmentActivity{
 	private LoadResourceTask m_load_task = null;
 	private LinePageIndicator m_indicator;
 	
+	private boolean m_is_callback_from_camera = false;
+	private Uri m_picture_uri;
+	
+	@Override
 	public void onCreate(Bundle saved_instance_state) {
 		super.onCreate(saved_instance_state);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -62,7 +68,7 @@ public class SlidePictureActivity extends FragmentActivity{
 			if (resultCode == RESULT_OK) {
 				// camera returned picture
 				// start ShareFragment , replace TakePictureFragment
-				startShareFragment(data);
+				m_is_callback_from_camera = true;
 			} else {
 				// user cancelled?
 				// do nothing
@@ -72,9 +78,22 @@ public class SlidePictureActivity extends FragmentActivity{
 		
 	}
 	
-	private void startShareFragment(Intent data) {
-		Bitmap bm = (Bitmap)data.getExtras().get("data");
-		m_view_slide_adapter.switchPicFragmentToShareFragment(bm);
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (m_is_callback_from_camera) {
+			startShareFragment(m_picture_uri);
+		}
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		m_is_callback_from_camera = false;
+	}
+	
+	private void startShareFragment(Uri data) {
+		m_view_slide_adapter.switchPicFragmentToShareFragment(data);
 	}
 	
 	public boolean startCamera() {
@@ -82,6 +101,8 @@ public class SlidePictureActivity extends FragmentActivity{
 			return false;
 		}
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		m_picture_uri = Utils.getOutputMediaFileUri(Utils.MEDIA_TYPE_IMAGE);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, m_picture_uri);
 		startActivityForResult(intent, Configures.start_camera_request_code);
 		return true;
 	}

@@ -24,6 +24,7 @@ public class GridChooseAdapter extends BaseAdapter {
 		s_thumbnails = tb;
 		m_context = c;
 		
+		// :TODO add stub image & empty image & fail image
 		options = new DisplayImageOptions.Builder()
 		//.showStubImage(R.drawable.ic_stub)
 		//.showImageForEmptyUri(R.drawable.ic_empty)
@@ -47,7 +48,6 @@ public class GridChooseAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		return position;
 	}
-	
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
