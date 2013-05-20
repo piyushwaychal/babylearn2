@@ -7,5 +7,13 @@
     <string name="menu_item_pause_on_scroll">Hello world!</string>
     <string name="menu_item_pause_on_fling">Hello world!</string>
     <string name="network_failure">请求失败，请检查网络然后重试</string>
+    <string name="save_photo_success">已成功保存到本地相册</string>
+    <string name="grid_activity_title">全部列表</string>
+    <string name="slide_activity_title">一步一步来</string>
+    <string name="coming_soon">coming soon.</string>
+    <string name="settings_activity_title">设置</string>
+    <string name="share_hint">快记录下宝宝的作品吧!</string>
+    <string name="share_not_available">分享功能即将开放</string>
+    <string name="settings_not_available">设置功能即将开放</string>
 
 </resources>

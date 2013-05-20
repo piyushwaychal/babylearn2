@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class ShareFragment extends Fragment implements OnClickListener{
 	private Uri m_sharing_picture_uri;
@@ -87,6 +88,7 @@ public class ShareFragment extends Fragment implements OnClickListener{
 			}
 			else {
 				ShareFragment.this.m_imageview.setImageBitmap(result);
+				
 			}
 		}
 	}

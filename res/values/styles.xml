@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -20,8 +20,20 @@
     
     <!-- ActionBar style -->
     <style name="MyActionBar" parent="@android:style/Widget.Holo.ActionBar">
-        <item name="android:background">#999999</item>
+        <item name="android:background">#58A7D8</item>
+        <item name="android:titleTextStyle">@style/MyActionBarTitle</item>
 
+    </style>
+    
+    <!-- ActionBar title style -->
+    <style name="MyActionBarTitle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">#F0F0F0</item>
+        <item name="android:textSize">20sp</item>
+        <!-- 
+        <item name="android:shadowColor">#202020</item>
+        <item name="android:shadowRadius">2</item>
+        <item name="android:shadowDy">1</item>
+        -->
     </style>
 
 </resources>  

@@ -11,37 +11,46 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 public class CoverActivity extends Activity implements OnClickListener {
 	private AnimationDrawable m_animation;
 	private ImageView m_animation_holder;
 	private ImageButton m_enter_button;
-	private ProgressBar m_spinner;
+	//private ProgressBar m_spinner;
 	private ChangeResourceTask m_change_task = null;
 	private ResourceFile m_resource_file = null;
 	private MediaPlayer m_sound_player = null;
+	private String m_title;
+	
+	private ImageView m_download_animation;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// enable up button
-		getActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.activity_cover);
+		ActionBar action_bar = getActionBar();
+		action_bar.setDisplayShowHomeEnabled(false);
+		action_bar.setDisplayShowHomeEnabled(true);
+		action_bar.setLogo(R.drawable.ic_action_logo);
 		m_animation = new AnimationDrawable();
 		m_animation.setOneShot(true);
 		m_animation_holder = (ImageView)findViewById(R.id.MainImageView);
@@ -49,19 +58,24 @@ public class CoverActivity extends Activity implements OnClickListener {
 		m_enter_button = (ImageButton) findViewById(R.id.MainGoButton);
 		m_enter_button.setOnClickListener(this);
 		m_enter_button.setClickable(false);
-		m_spinner = (ProgressBar) findViewById(R.id.MainprogressBar);
-		m_spinner.setVisibility(View.GONE);
+		
+		m_download_animation = (ImageView) findViewById(R.id.downloading_animation);
+		AnimationDrawable ad = (AnimationDrawable) m_download_animation.getDrawable();
+		ad.start();
+		
 		Intent intent = getIntent();
 		String key = intent.getStringExtra(Configures.res_key);
 		Log.v("zhangge", key == null ? "null": key);
 		changeResource(key);
 	}
-	
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.MainGoButton:
-			startSlideActivity();
+			if (m_resource_file != null) {
+				startSlideActivity();				
+			}
 			break;
 		case R.id.MainImageView:
 			//start animation and sound
@@ -73,6 +87,13 @@ public class CoverActivity extends Activity implements OnClickListener {
 		}
 	}
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
 	private void startSlideActivity() {
 		Intent intent = new Intent(this, SlidePictureActivity.class);
 		intent.putExtra(Configures.intent_key_name, m_resource_file.getKey());
@@ -99,6 +120,9 @@ public class CoverActivity extends Activity implements OnClickListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
+			startChooseActivity();
+			return true;
+		case R.id.action_grid:
 			startChooseActivity();
 			return true;
 		}
@@ -144,8 +168,8 @@ public class CoverActivity extends Activity implements OnClickListener {
 					m_sound_player.prepare();
 					m_sound_player.start();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					m_sound_player.release();
 					m_sound_player = null;
 				}
 			}
@@ -223,10 +247,10 @@ public class CoverActivity extends Activity implements OnClickListener {
 			return null;
 		}
 		
-		protected void onProgressUpdate(int progress) {
-			m_spinner.setProgress(progress);
-		}
-		
+//		protected void onProgressUpdate(int progress) {
+//			//m_spinner.setProgress(progress);
+//		}
+//		
 		protected void onPostExecute(ResourceFile rf) {
 			if (rf == null) {
 				// some thing wrong ?
@@ -238,14 +262,18 @@ public class CoverActivity extends Activity implements OnClickListener {
 				changeSound();
 				CoverActivity.this.m_resource_file = rf;
 			}
-			CoverActivity.this.m_spinner.setVisibility(View.GONE);
+			//CoverActivity.this.m_spinner.setVisibility(View.GONE);
 			CoverActivity.this.m_change_task = null;
 			CoverActivity.this.m_enter_button.setClickable(true);
+			CoverActivity.this.m_download_animation.setVisibility(View.GONE);
 		}
 		
 		protected void onPreExecute() {
-			CoverActivity.this.m_spinner.setVisibility(View.VISIBLE);
+			//CoverActivity.this.m_spinner.setVisibility(View.VISIBLE);
+			CoverActivity.this.m_download_animation.setVisibility(View.VISIBLE);
+			CoverActivity.this.m_animation_holder.setImageDrawable(null);
 			CoverActivity.this.m_change_task = this;
+			m_enter_button.setClickable(false);
 		}
 		
 		protected void onCancelled(ResourceFile rf) {

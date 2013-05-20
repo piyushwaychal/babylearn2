@@ -29,6 +29,10 @@ public class Configures {
 	static final String thumbnails_image_relative_path = "thumbs";
 	static final String zip_relative_path = "learnres";
 	
+	// share related
+	static final String weibo_appkey = "1437838508";
+	static final String weibo_redirect_url = "http://www.wingedstone.com/weibo/success.html";
+	
 	public static String GetConfigureUrl() {
 		return configure_url;
 	}

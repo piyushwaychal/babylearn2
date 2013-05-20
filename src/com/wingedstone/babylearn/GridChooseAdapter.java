@@ -26,9 +26,9 @@ public class GridChooseAdapter extends BaseAdapter {
 		
 		// :TODO add stub image & empty image & fail image
 		options = new DisplayImageOptions.Builder()
-		//.showStubImage(R.drawable.ic_stub)
-		//.showImageForEmptyUri(R.drawable.ic_empty)
-		//.showImageOnFail(R.drawable.ic_error)
+		//.showStubImage(R.drawable.placeholder)
+		//.showImageForEmptyUri(R.drawable.placeholder)
+		.showImageOnFail(R.drawable.placeholder_error)
 		.cacheOnDisc()
 		.bitmapConfig(Bitmap.Config.RGB_565)
 		.build();
@@ -56,7 +56,7 @@ public class GridChooseAdapter extends BaseAdapter {
 			imageView = new ImageView(m_context);
 			imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 			imageView.setAdjustViewBounds(true);
-			//imageView.setBackgroundResource(R.drawable.grid_background);
+			//imageView.setBackgroundResource(R.drawable.background);
 			imageView.setBackgroundColor(Color.rgb(230, 230, 230));
             imageView.setLayoutParams(new GridView.LayoutParams(
                     LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context=".MainActivity" >
 
     <ImageView
@@ -14,24 +15,29 @@
         android:adjustViewBounds="true"
         android:baselineAlignBottom="false"
         android:cropToPadding="false"
-        android:src="@drawable/a0" />
+        android:src="@null" />
+    
+    <ImageView
+        android:id="@+id/downloading_animation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:baselineAlignBottom="false"
+        android:cropToPadding="false"
+        android:visibility="gone"
+        android:src="@drawable/animation" />
 
     <ImageButton
         android:id="@+id/MainGoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/MainImageView"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
         android:background="@null"
         android:src="@drawable/main_image_button" />
-
-    <ProgressBar
-        android:id="@+id/MainprogressBar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/MainImageView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="125dp" />
 
 </RelativeLayout>

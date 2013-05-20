@@ -11,10 +11,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
+import android.widget.Toast;
 public class GridChooseActivity extends Activity implements AdapterView.OnItemClickListener{
 
 	private GridChooseAdapter m_adapter;
@@ -27,6 +34,12 @@ public class GridChooseActivity extends Activity implements AdapterView.OnItemCl
 		 super.onCreate(savedInstanceState);
 		 setContentView(R.layout.activity_gridchoose);
 		 MyApplication app = (MyApplication)getApplicationContext();
+		 getActionBar().setLogo(R.drawable.ic_action_back);
+		 getActionBar().setDisplayShowTitleEnabled(false);
+		 getActionBar().setHomeButtonEnabled(true);
+		 getActionBar().setDisplayShowCustomEnabled(true);
+		 getActionBar().setCustomView(R.layout.actionbar_cover);
+		 getActionBar().setTitle(R.string.grid_activity_title);
 		 m_adapter = new GridChooseAdapter(app.m_thumbnails, this);
 		 m_grid_view = (PullToRefreshGridView) findViewById(R.id.gridchoose);
 		 m_grid_view.setMode(Mode.PULL_FROM_END);
@@ -49,6 +62,13 @@ public class GridChooseActivity extends Activity implements AdapterView.OnItemCl
 		returnCoverActivity(item.key);
 	}
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.grid, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
 	public void getMoreThumbnails(boolean first_time) {
 		MyApplication app = (MyApplication)getApplicationContext();
 		int start_point = app.m_thumbnails.getItemCount();
@@ -59,6 +79,18 @@ public class GridChooseActivity extends Activity implements AdapterView.OnItemCl
 			}
 			m_load_task.execute(start_point);		
 		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			return true;
+		case R.id.action_settings:
+			Toast.makeText(this, getResources().getString(R.string.settings_not_available), Toast.LENGTH_LONG).show();
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	private void returnCoverActivity(String key) {
