@@ -158,6 +158,27 @@ public class ResourceFile extends ZipFile{
 		return null;
 	}
 	
+	public void releaseResources() {
+		if  (m_cover_prepared) {
+			for (Bitmap bm : m_animation_bitmaps) {
+				if (bm != null) {
+					bm.recycle();
+				}
+			}
+			m_animation_bitmaps = null;
+			m_cover_prepared = false;
+		}
+		if (m_slides_prepared) {
+			for (Bitmap bm : m_step_picture_bitmaps) {
+				if (bm != null) {
+					bm.recycle();
+				}
+			}
+			m_step_picture_bitmaps = null;
+			m_slides_prepared = false;
+		}
+	}
+	
 	/*
 	 * prepare the files into memory
 	 */
@@ -216,9 +237,12 @@ public class ResourceFile extends ZipFile{
 		m_sound = null;
 		m_prepared = false;
 		m_options = new BitmapFactory.Options();
-		m_options.inScaled = false;
+		m_options.inScaled = true;
+		m_options.inPurgeable = true;
 		m_options.inPreferredConfig = Bitmap.Config.RGB_565;
+		m_options.inDither = true;
 		m_options.inDensity = DisplayMetrics.DENSITY_HIGH;
+		m_options.inTargetDensity = context.getResources().getDisplayMetrics().densityDpi;
 		setKey(thiskey);
 		m_context = context;
 		Enumeration<? extends ZipEntry> e = this.entries();

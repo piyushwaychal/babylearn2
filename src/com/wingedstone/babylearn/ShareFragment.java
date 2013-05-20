@@ -71,7 +71,7 @@ public class ShareFragment extends Fragment implements OnClickListener{
 			Bitmap bm = null;
 			try {
 				InputStream ins = new FileInputStream(file);
-				bm = Utils.decodeSampleBitmapFromInputStream(ins, 600, 0, true); 
+				bm = Utils.decodeSampleBitmapFromInputStream(ins, 600, 0, true, getActivity()); 
 			}
 			catch (Exception e) {
 			}	

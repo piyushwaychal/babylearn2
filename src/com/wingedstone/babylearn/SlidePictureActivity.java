@@ -148,6 +148,7 @@ public class SlidePictureActivity extends FragmentActivity implements IWeiboHand
 		super.onResume();
 		if (m_is_callback_from_camera) {
 			startShareFragment(m_picture_uri);
+			//sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri))
 			Toast.makeText(this,
 					getResources().getString(R.string.save_photo_success), 
 					Toast.LENGTH_LONG)

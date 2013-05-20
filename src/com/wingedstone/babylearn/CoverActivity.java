@@ -241,7 +241,7 @@ public class CoverActivity extends Activity implements OnClickListener {
 			        return null;		        	
 		        }
 			}
-			if (rf.prepare()){
+			if (rf.prepareForCover()){
 				return rf;
 			}
 			return null;
@@ -258,7 +258,7 @@ public class CoverActivity extends Activity implements OnClickListener {
 				Utils.makeToastAboutNetworkError(CoverActivity.this);
 			}
 			else {
-				CoverActivity.this.changeAnimation(rf.m_animation_bitmaps);
+				CoverActivity.this.changeAnimation(rf.getCoverAnimations());
 				changeSound();
 				CoverActivity.this.m_resource_file = rf;
 			}
@@ -272,6 +272,9 @@ public class CoverActivity extends Activity implements OnClickListener {
 			//CoverActivity.this.m_spinner.setVisibility(View.VISIBLE);
 			CoverActivity.this.m_download_animation.setVisibility(View.VISIBLE);
 			CoverActivity.this.m_animation_holder.setImageDrawable(null);
+			if (m_resource_file != null) {
+				m_resource_file.releaseResources();
+			}
 			CoverActivity.this.m_change_task = this;
 			m_enter_button.setClickable(false);
 		}

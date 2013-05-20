@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.renderscript.Sampler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -95,17 +96,22 @@ public class Utils {
 	}
 	public static Bitmap decodeSampleBitmapFromInputStream(InputStream is, 
 			int reqWidth, int reqHeight, 
-			boolean faster_mode) {
+			boolean faster_mode, Context context) {
 		final BufferedInputStream ins = new BufferedInputStream(is, 32 * 1024);
 		try {
 			final BitmapFactory.Options options = new BitmapFactory.Options();
 		    options.inJustDecodeBounds = true;
+		    options.inPurgeable = true;
 		    ins.mark(32 * 1024);
 		    BitmapFactory.decodeStream(ins, null, options);
 		    ins.reset();
 		    options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
 		    options.inJustDecodeBounds = false;
 		    options.inPreferredConfig = Bitmap.Config.RGB_565;
+		    options.inDensity = DisplayMetrics.DENSITY_HIGH;
+		    options.inTargetDensity = context.getResources().getDisplayMetrics().densityDpi;
+		    options.inDither = true;
+		    options.inScaled = true;
 		    return BitmapFactory.decodeStream(ins, null, options);
 		} catch (Exception e) {
 			// TODO: handle exception
