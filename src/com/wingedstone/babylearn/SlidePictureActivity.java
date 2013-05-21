@@ -1,5 +1,7 @@
 package com.wingedstone.babylearn;
 
+import java.io.File;
+
 import com.sina.weibo.sdk.WeiboSDK;
 import com.sina.weibo.sdk.api.BaseResponse;
 import com.sina.weibo.sdk.api.IWeiboAPI;
@@ -15,9 +17,11 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -43,6 +47,7 @@ public class SlidePictureActivity extends FragmentActivity implements IWeiboHand
 	
 	private boolean m_is_callback_from_camera = false;
 	private Uri m_picture_uri;
+	private String m_picture_path;
 	private String m_title;
 	
 	private IWeiboAPI m_weibo_api = null;
@@ -148,7 +153,12 @@ public class SlidePictureActivity extends FragmentActivity implements IWeiboHand
 		super.onResume();
 		if (m_is_callback_from_camera) {
 			startShareFragment(m_picture_uri);
-			//sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri))
+			//sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+			//sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStoragePublicDirectory(
+		    //          Environment.DIRECTORY_DCIM))));
+			String[] paths = {m_picture_path};
+			MediaScannerConnection.scanFile(this, paths,
+					null, null);
 			Toast.makeText(this,
 					getResources().getString(R.string.save_photo_success), 
 					Toast.LENGTH_LONG)
@@ -171,7 +181,9 @@ public class SlidePictureActivity extends FragmentActivity implements IWeiboHand
 			return false;
 		}
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		m_picture_uri = Utils.getOutputMediaFileUri(Utils.MEDIA_TYPE_IMAGE);
+		File f = Utils.getOutputMediaFile(Utils.MEDIA_TYPE_IMAGE);
+		m_picture_uri = Uri.fromFile(f);
+		m_picture_path = f.getAbsolutePath();
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, m_picture_uri);
 		startActivityForResult(intent, Configures.start_camera_request_code);
 		return true;

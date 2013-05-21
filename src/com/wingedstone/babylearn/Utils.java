@@ -11,11 +11,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.renderscript.Sampler;
+import android.support.v4.content.CursorLoader;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
@@ -35,7 +38,7 @@ public class Utils {
 	    // using Environment.getExternalStorageState() before doing this.
 
 	    File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-	              Environment.DIRECTORY_DCIM), "Camera");
+	              Environment.DIRECTORY_DCIM), "babydraw");
 	    Log.v("zhangge", mediaStorageDir.getAbsolutePath());
 	    // This location works best if you want the created images to be shared
 	    // between applications and persist after your app has been uninstalled.

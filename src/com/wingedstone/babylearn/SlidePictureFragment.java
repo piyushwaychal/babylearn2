@@ -48,4 +48,5 @@ public class SlidePictureFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 		m_image_view.setImageBitmap(m_bitmap);
 	}
+
 }
