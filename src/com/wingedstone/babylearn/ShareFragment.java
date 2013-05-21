@@ -71,10 +71,14 @@ public class ShareFragment extends Fragment implements OnClickListener{
 			Bitmap bm = null;
 			try {
 				InputStream ins = new FileInputStream(file);
-				bm = Utils.decodeSampleBitmapFromInputStream(ins, 600, 0, true, getActivity()); 
+				bm = Utils.decodeSampleBitmapFromInputStream(ins,
+						Configures.GetRequestWidth(getActivity()),
+						true, getActivity()); 
 			}
 			catch (Exception e) {
 			}	
+			Log.v("zhangge", String.valueOf(bm.getHeight()));
+			Log.v("zhangge", String.valueOf(bm.getWidth()));
 			return bm;
 		}
 
@@ -88,7 +92,6 @@ public class ShareFragment extends Fragment implements OnClickListener{
 			}
 			else {
 				ShareFragment.this.m_imageview.setImageBitmap(result);
-				
 			}
 		}
 	}

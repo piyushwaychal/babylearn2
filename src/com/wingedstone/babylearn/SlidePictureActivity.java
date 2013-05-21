@@ -64,9 +64,9 @@ public class SlidePictureActivity extends FragmentActivity implements IWeiboHand
 		m_view_pager.setAdapter(m_view_slide_adapter);
 		m_indicator = (LinePageIndicator) findViewById(R.id.pager_indicator);
 		m_indicator.setViewPager(m_view_pager);
-		m_indicator.setLineWidth(50);
+		m_indicator.setLineWidth(Configures.indicator_line_width);
 		m_weibo_api = WeiboSDK.createWeiboAPI(this, Configures.weibo_appkey);
-		m_indicator.setStrokeWidth(5);
+		m_indicator.setStrokeWidth(Configures.indicator_stoke_width);
 		dispatchIntent();
 //		TextView v = (TextView) ab.getCustomView().findViewById(R.id.text_content);
 //		v.setText(m_title);

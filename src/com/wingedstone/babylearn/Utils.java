@@ -72,6 +72,17 @@ public class Utils {
 	    return list.size() > 0;
 	}
 	
+	public static int upperFloorPowTwo(int v) {
+	    v--;
+	    v |= v >> 1;
+	    v |= v >> 2;
+	    v |= v >> 4;
+	    v |= v >> 8;
+	    v |= v >> 16;
+	    v++;
+		return v;
+	}
+	
 	public static int calculateInSampleSize(
             BitmapFactory.Options options, 
             int reqWidth, int reqHeight) {
@@ -83,19 +94,35 @@ public class Utils {
 	    if (height > reqHeight || width > reqWidth) {
 	
 	        // Calculate ratios of height and width to requested height and width
-	        final int heightRatio = reqHeight == 0 ? Integer.MAX_VALUE : Math.round((float) height / (float) reqHeight);
-	        final int widthRatio = reqWidth == 0 ? Integer.MAX_VALUE : Math.round((float) width / (float) reqWidth);
+	        final int heightRatio = Math.round((float) height / (float) reqHeight);
+	        final int widthRatio = Math.round((float) width / (float) reqWidth);
 	
 	        // Choose the smallest ratio as inSampleSize value, this will guarantee
 	        // a final image with both dimensions larger than or equal to the
 	        // requested height and width.
-	        inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+	        inSampleSize = heightRatio > widthRatio ? heightRatio : widthRatio;
 	    }
-	    
+	    return  inSampleSize;
+	}
+	
+	public static int calculateInSampleSizeByWidth(
+            BitmapFactory.Options options, 
+            int reqWidth) {
+	    // Raw height and width of image
+	    final int width = options.outWidth;
+	    int inSampleSize = 1;
+	
+	    if ( width > reqWidth) {
+	
+	        // Calculate ratios of height and width to requested height and width
+	    	inSampleSize = Math.round((float) width / (float) reqWidth);
+	
+	    }
 	    return inSampleSize;
 	}
+	
 	public static Bitmap decodeSampleBitmapFromInputStream(InputStream is, 
-			int reqWidth, int reqHeight, 
+			int reqWidth, 
 			boolean faster_mode, Context context) {
 		final BufferedInputStream ins = new BufferedInputStream(is, 32 * 1024);
 		try {
@@ -105,13 +132,13 @@ public class Utils {
 		    ins.mark(32 * 1024);
 		    BitmapFactory.decodeStream(ins, null, options);
 		    ins.reset();
-		    options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+		    options.inSampleSize = calculateInSampleSizeByWidth(options, reqWidth);
 		    options.inJustDecodeBounds = false;
 		    options.inPreferredConfig = Bitmap.Config.RGB_565;
-		    options.inDensity = DisplayMetrics.DENSITY_HIGH;
-		    options.inTargetDensity = context.getResources().getDisplayMetrics().densityDpi;
-		    options.inDither = true;
-		    options.inScaled = true;
+//		    options.inDensity = context.getResources().getDisplayMetrics().densityDpi;
+//		    options.inTargetDensity = context.getResources().getDisplayMetrics().densityDpi;
+//		    options.inDither = true;
+//		    options.inScaled = true;
 		    return BitmapFactory.decodeStream(ins, null, options);
 		} catch (Exception e) {
 			// TODO: handle exception

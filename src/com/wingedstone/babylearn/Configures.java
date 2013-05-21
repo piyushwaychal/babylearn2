@@ -1,5 +1,8 @@
 package com.wingedstone.babylearn;
 
+import android.content.Context;
+import android.util.DisplayMetrics;
+
 
 public class Configures {
 	
@@ -33,6 +36,13 @@ public class Configures {
 	static final String weibo_appkey = "1437838508";
 	static final String weibo_redirect_url = "http://www.wingedstone.com/weibo/success.html";
 	
+	// page indicator parameters
+	static final int indicator_line_width = 40;
+	static final int indicator_stoke_width = 5;
+	
+	// photo size
+	static final int photo_request_width = 600;
+	
 	public static String GetConfigureUrl() {
 		return configure_url;
 	}
@@ -47,6 +57,11 @@ public class Configures {
 	
 	public static String GetZipUrl(String key) {
 		return String.format(upyun_zip_url, key);
+	}
+	
+	public static int GetRequestWidth(Context context) {
+		int density_dpi = context.getResources().getDisplayMetrics().densityDpi;
+		return photo_request_width * density_dpi / DisplayMetrics.DENSITY_XHIGH;
 	}
 	
 }
