@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
  	<uses-feature android:name="android.hardware.camera" />
  	<uses-feature android:name="android.hardware.camera.autofocus" />
+ 
 
     <application
         android:allowBackup="true"
@@ -29,7 +30,8 @@
             </intent-filter>
         </activity>
         <activity 
-            android:name="com.wingedstone.babylearn.SlidePictureActivity">
+            android:name="com.wingedstone.babylearn.SlidePictureActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -43,6 +45,8 @@
             android:name="com.wingedstone.babylearn.GridChooseActivity">
             
         </activity>
+      
+        
     </application>
 
 </manifest>

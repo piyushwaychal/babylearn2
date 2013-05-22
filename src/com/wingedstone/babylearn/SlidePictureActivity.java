@@ -9,6 +9,11 @@ import com.sina.weibo.sdk.api.IWeiboHandler;
 import com.sina.weibo.sdk.api.ImageObject;
 import com.sina.weibo.sdk.api.SendMessageToWeiboRequest;
 import com.sina.weibo.sdk.api.WeiboMessage;
+import com.tencent.mm.sdk.openapi.BaseReq;
+import com.tencent.mm.sdk.openapi.BaseResp;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.viewpagerindicator.LinePageIndicator;
 import com.viewpagerindicator.UnderlinePageIndicator;
 
@@ -37,7 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher.ViewFactory;
 
-public class SlidePictureActivity extends FragmentActivity implements IWeiboHandler.Response{
+public class SlidePictureActivity extends FragmentActivity{
 	
 	// view container
 	private ViewPager m_view_pager;
@@ -49,8 +54,7 @@ public class SlidePictureActivity extends FragmentActivity implements IWeiboHand
 	private Uri m_picture_uri;
 	private String m_picture_path;
 	private String m_title;
-	
-	private IWeiboAPI m_weibo_api = null;
+	public ShareKit m_share_kit;
 	
 	@Override
 	public void onCreate(Bundle saved_instance_state) {
@@ -63,6 +67,8 @@ public class SlidePictureActivity extends FragmentActivity implements IWeiboHand
 		ab.setDisplayShowTitleEnabled(false);
 		ab.setHomeButtonEnabled(true);
 		
+		m_share_kit = new ShareKit(this);
+		
 		setContentView(R.layout.activity_pictureslide);
 		m_view_pager = (ViewPager) findViewById(R.id.main_pager);
 		m_view_slide_adapter = new SlidePicturePagerAdapter(getSupportFragmentManager());
@@ -70,11 +76,9 @@ public class SlidePictureActivity extends FragmentActivity implements IWeiboHand
 		m_indicator = (LinePageIndicator) findViewById(R.id.pager_indicator);
 		m_indicator.setViewPager(m_view_pager);
 		m_indicator.setLineWidth(Configures.indicator_line_width);
-		m_weibo_api = WeiboSDK.createWeiboAPI(this, Configures.weibo_appkey);
 		m_indicator.setStrokeWidth(Configures.indicator_stoke_width);
+		
 		dispatchIntent();
-//		TextView v = (TextView) ab.getCustomView().findViewById(R.id.text_content);
-//		v.setText(m_title);
 	}
 	
 	@Override
@@ -94,30 +98,28 @@ public class SlidePictureActivity extends FragmentActivity implements IWeiboHand
 
 	private void dispatchIntent() {
 		Intent intent = getIntent();
-		String action = intent.getAction();
-		if (action == "com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY") {
-			m_weibo_api.responseListener(intent, this);
-		} else {
-			String key = intent.getStringExtra(Configures.intent_key_name);
+		m_share_kit.handleCallbackIntent(intent);
+		String key = intent.getStringExtra(Configures.intent_key_name);
+		if (key != null) {
 			m_load_task = new LoadResourceTask();
 			m_load_task.execute(key);
 		}
 	}
 	
-	public void shareToWeibo(Bitmap bm) {
-		ImageObject imageObject = new ImageObject();
-		imageObject.setImageObject(bm);
-		// 初始化微博的分享消息
-		WeiboMessage weiboMessage = new WeiboMessage();
-		// 图片消息
-		weiboMessage.mediaObject = imageObject;
-		// 初始化从三方到微博的消息请求
-		SendMessageToWeiboRequest req = new SendMessageToWeiboRequest();
-		req.transaction = String.valueOf(System.currentTimeMillis());// 用transaction唯一标识一个请求
-		req.message = weiboMessage;
-		// 发送请求消息到微博
-		m_weibo_api.sendRequest(this, req);
-	}
+//	public void shareToWeibo(Bitmap bm) {
+//		ImageObject imageObject = new ImageObject();
+//		imageObject.setImageObject(bm);
+//		// 初始化微博的分享消息
+//		WeiboMessage weiboMessage = new WeiboMessage();
+//		// 图片消息
+//		weiboMessage.mediaObject = imageObject;
+//		// 初始化从三方到微博的消息请求
+//		SendMessageToWeiboRequest req = new SendMessageToWeiboRequest();
+//		req.transaction = String.valueOf(System.currentTimeMillis());// 用transaction唯一标识一个请求
+//		req.message = weiboMessage;
+//		// 发送请求消息到微博
+//		m_weibo_api.sendRequest(this, req);
+//	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -153,9 +155,6 @@ public class SlidePictureActivity extends FragmentActivity implements IWeiboHand
 		super.onResume();
 		if (m_is_callback_from_camera) {
 			startShareFragment(m_picture_uri);
-			//sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
-			//sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStoragePublicDirectory(
-		    //          Environment.DIRECTORY_DCIM))));
 			String[] paths = {m_picture_path};
 			MediaScannerConnection.scanFile(this, paths,
 					null, null);
@@ -215,19 +214,6 @@ public class SlidePictureActivity extends FragmentActivity implements IWeiboHand
 		protected void onPreExecute() {
 			m_load_task = this;
 		}		
-	}
-
-	@Override
-	public void onResponse(BaseResponse baseResp) {
-	   switch (baseResp.errCode) {
-        case com.sina.weibo.sdk.constant.Constants.ErrorCode.ERR_OK:
-            Toast.makeText(this, "成功！！", Toast.LENGTH_LONG).show();
-            // :TODO disable share button
-            break;
-        case com.sina.weibo.sdk.constant.Constants.ErrorCode.ERR_FAIL:
-            Toast.makeText(this, baseResp.errMsg + ":失败！！", Toast.LENGTH_LONG).show();
-            break;
-        }
 	}
 
 }

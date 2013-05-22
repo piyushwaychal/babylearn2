@@ -15,5 +15,10 @@
     <string name="share_hint">快记录下宝宝的作品吧!</string>
     <string name="share_not_available">分享功能即将开放</string>
     <string name="settings_not_available">设置功能即将开放</string>
+    
+    <string name="errcode_success">发送成功</string>
+	<string name="errcode_cancel">发送取消</string>
+	<string name="errcode_deny">发送被拒绝</string>
+	<string name="errcode_unknown">发送返回</string>
 
 </resources>

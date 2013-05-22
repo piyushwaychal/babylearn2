@@ -36,6 +36,8 @@ public class Configures {
 	static final String weibo_appkey = "1437838508";
 	static final String weibo_redirect_url = "http://www.wingedstone.com/weibo/success.html";
 	
+	static final String wechat_appkey = "wx4b9a37d1d5fc4db2";
+	
 	// page indicator parameters
 	static final int indicator_line_width = 40;
 	static final int indicator_stoke_width = 5;

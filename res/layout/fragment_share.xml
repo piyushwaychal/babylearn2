@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical" >
+    >
 
     <ImageView
         android:id="@+id/preview_picture"
@@ -12,9 +12,22 @@
         android:layout_marginTop="18dp"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:adjustViewBounds="true"
         android:background="@drawable/share_photo_bg"
-        android:padding="14dp"
+        android:padding="12dp"
          />
+    <ImageButton
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:layout_above="@id/preview_picture"
+        android:src="@drawable/share_button"
+        />
 
-</LinearLayout>
+</RelativeLayout>

@@ -19,12 +19,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 public class ShareFragment extends Fragment implements OnClickListener{
 	private Uri m_sharing_picture_uri;
 	private ImageView m_imageview;
+	private ImageButton m_share_button;
+	private Bitmap m_bitmap;
 	
 	static ShareFragment newInstance(Uri bm) {
 		final ShareFragment sf = new ShareFragment();
@@ -41,6 +44,8 @@ public class ShareFragment extends Fragment implements OnClickListener{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View rootView = (View) inflater.inflate(R.layout.fragment_share, container, false);
 		m_imageview = (ImageView) rootView.findViewById(R.id.preview_picture);
+		m_share_button = (ImageButton) rootView.findViewById(R.id.share);
+		m_share_button.setOnClickListener(this);
 		return rootView;
 	}
 	
@@ -52,7 +57,8 @@ public class ShareFragment extends Fragment implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
-		
+		SlidePictureActivity activity = (SlidePictureActivity) getActivity();
+		activity.m_share_kit.share(m_bitmap, 0);
 	}
 
 	public Uri getSharingPicture() {
@@ -92,6 +98,7 @@ public class ShareFragment extends Fragment implements OnClickListener{
 			}
 			else {
 				ShareFragment.this.m_imageview.setImageBitmap(result);
+				m_bitmap = result;
 			}
 		}
 	}
