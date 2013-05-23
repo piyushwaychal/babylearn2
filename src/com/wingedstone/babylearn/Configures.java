@@ -33,10 +33,10 @@ public class Configures {
 	static final String zip_relative_path = "learnres";
 	
 	// share related
-	static final String weibo_appkey = "1437838508";
-	static final String weibo_redirect_url = "http://www.wingedstone.com/weibo/success.html";
+	public static final String weibo_appkey = "1437838508";
+	public static final String weibo_redirect_url = "http://www.wingedstone.com/weibo/success.html";
 	
-	static final String wechat_appkey = "wx4b9a37d1d5fc4db2";
+	public static final String wechat_appkey = "wx4b9a37d1d5fc4db2";
 	
 	// page indicator parameters
 	static final int indicator_line_width = 40;

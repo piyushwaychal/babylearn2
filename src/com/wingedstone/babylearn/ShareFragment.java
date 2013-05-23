@@ -58,7 +58,8 @@ public class ShareFragment extends Fragment implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		SlidePictureActivity activity = (SlidePictureActivity) getActivity();
-		activity.m_share_kit.share(m_bitmap, 0);
+		//activity.m_share_kit.share(m_bitmap, 0);
+		activity.m_share_kit.authorize();
 	}
 
 	public Uri getSharingPicture() {

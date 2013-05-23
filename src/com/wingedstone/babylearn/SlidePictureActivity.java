@@ -2,13 +2,6 @@ package com.wingedstone.babylearn;
 
 import java.io.File;
 
-import com.sina.weibo.sdk.WeiboSDK;
-import com.sina.weibo.sdk.api.BaseResponse;
-import com.sina.weibo.sdk.api.IWeiboAPI;
-import com.sina.weibo.sdk.api.IWeiboHandler;
-import com.sina.weibo.sdk.api.ImageObject;
-import com.sina.weibo.sdk.api.SendMessageToWeiboRequest;
-import com.sina.weibo.sdk.api.WeiboMessage;
 import com.tencent.mm.sdk.openapi.BaseReq;
 import com.tencent.mm.sdk.openapi.BaseResp;
 import com.tencent.mm.sdk.openapi.IWXAPI;
@@ -16,6 +9,7 @@ import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.viewpagerindicator.LinePageIndicator;
 import com.viewpagerindicator.UnderlinePageIndicator;
+import com.wingedstone.babylearn.sharekit.ShareKit;
 
 import android.R.integer;
 import android.app.ActionBar;
@@ -136,6 +130,8 @@ public class SlidePictureActivity extends FragmentActivity{
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		m_share_kit.handleCallbackIntent(requestCode, resultCode, data);
 		if (requestCode == Configures.start_camera_request_code) {
 			if (resultCode == RESULT_OK) {
 				// camera returned picture

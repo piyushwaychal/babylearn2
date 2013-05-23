@@ -1,15 +1,13 @@
-package com.wingedstone.babylearn;
+package com.wingedstone.babylearn.sharekit;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.sina.weibo.sdk.WeiboSDK;
-import com.sina.weibo.sdk.api.BaseResponse;
-import com.sina.weibo.sdk.api.IWeiboAPI;
-import com.sina.weibo.sdk.api.IWeiboHandler;
 import com.tencent.mm.sdk.openapi.BaseReq;
 import com.tencent.mm.sdk.openapi.BaseResp;
 import com.tencent.mm.sdk.openapi.IWXAPI;
@@ -19,22 +17,33 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.tencent.mm.sdk.openapi.WXImageObject;
 import com.tencent.mm.sdk.openapi.WXMediaMessage;
 import com.tencent.mm.sdk.openapi.WXTextObject;
+import com.weibo.sdk.android.Oauth2AccessToken;
+import com.weibo.sdk.android.Weibo;
+import com.weibo.sdk.android.WeiboAuthListener;
+import com.weibo.sdk.android.WeiboDialogError;
+import com.weibo.sdk.android.WeiboException;
+import com.weibo.sdk.android.sso.SsoHandler;
+import com.wingedstone.babylearn.Configures;
+import com.wingedstone.babylearn.R;
+import com.wingedstone.babylearn.Utils;
+import com.wingedstone.babylearn.R.string;
 
-public class ShareKit implements IWeiboHandler.Response, 
-	IWXAPIEventHandler{
+public class ShareKit implements IWXAPIEventHandler{
 	
-	private IWeiboAPI weibo_api = null;	
+	private Weibo weibo_api = null;	
+	private SsoHandler weibo_sso_api = null;
 	private IWXAPI wechat_api = null;
-	private Context context;
+	private Activity context;
 	
-	public ShareKit(Context c) {
+	public ShareKit(Activity c) {
 		context = c;
 		init();
 	}
 	
 	public void init() {
 		// share initialize
-		weibo_api = WeiboSDK.createWeiboAPI(context, Configures.weibo_appkey);	
+		weibo_api = Weibo.getInstance(Configures.weibo_appkey, Configures.weibo_redirect_url);
+		weibo_sso_api = new SsoHandler( context, weibo_api);
 		wechat_api = WXAPIFactory.createWXAPI(context, Configures.wechat_appkey, true);
 		wechat_api.registerApp(Configures.wechat_appkey);
 		
@@ -42,9 +51,10 @@ public class ShareKit implements IWeiboHandler.Response,
 	
 	public void handleCallbackIntent(Intent intent) {
 		wechat_api.handleIntent(intent, this);
-		if (intent.getAction() == "com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY") {
-			weibo_api.responseListener(intent, this);
-		} 
+	}
+	
+	public void handleCallbackIntent(int requestCode, int resultCode, Intent data) {
+		weibo_sso_api.authorizeCallBack(requestCode, resultCode, data);
 	}
 	
 	public void share(Bitmap bmp, int to) {
@@ -65,19 +75,15 @@ public class ShareKit implements IWeiboHandler.Response,
 		boolean result = wechat_api.sendReq(req);
 		Toast.makeText(context, String.valueOf(result) , Toast.LENGTH_SHORT).show();
 	}
-
-	@Override
-	public void onResponse(BaseResponse baseResp) {
-		int result = 0;
-	   switch (baseResp.errCode) {
-        case com.sina.weibo.sdk.constant.Constants.ErrorCode.ERR_OK:
-        	result = R.string.errcode_success;
-            break;
-        case com.sina.weibo.sdk.constant.Constants.ErrorCode.ERR_FAIL:
-        	result = R.string.errcode_unknown;
-            break;
-        }
-		Toast.makeText(context, result, Toast.LENGTH_LONG).show();	   
+	
+	public void authorize() {
+		weibo_sso_api.authorize(new WeiboListener());
+	}
+	
+	public void shareToWeibo(Bitmap bmp) {
+		Oauth2AccessToken token = AccessTokenKeeper.readAccessToken(context);
+		if (token.isSessionValid()) {
+		}
 	}
 
 	@Override
@@ -112,5 +118,34 @@ public class ShareKit implements IWeiboHandler.Response,
 	private String buildTransaction(final String type) {
 		return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
 	}
+	
+	 class WeiboListener implements WeiboAuthListener {
+
+	        @Override
+	        public void onComplete(Bundle values) {
+	        	String token = values.getString("access_token");
+	            String expires_in = values.getString("expires_in");
+	            Oauth2AccessToken accessToken = new Oauth2AccessToken(token, expires_in);
+	            if (accessToken.isSessionValid()) {
+	            	AccessTokenKeeper.keepAccessToken(ShareKit.this.context,
+	                        accessToken);
+	                Toast.makeText(ShareKit.this.context, "认证成功", Toast.LENGTH_SHORT)
+	                        .show();
+	            }
+	        }
+
+	        @Override
+	        public void onError(WeiboDialogError e) {
+	        }
+
+	        @Override
+	        public void onCancel() {
+	        }
+
+	        @Override
+	        public void onWeiboException(WeiboException e) {
+	        }
+
+	    }
 
 }

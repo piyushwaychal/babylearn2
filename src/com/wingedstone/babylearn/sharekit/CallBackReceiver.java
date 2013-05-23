@@ -1,7 +1,8 @@
-package com.wingedstone.babylearn;
+package com.wingedstone.babylearn.sharekit;
 
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.wingedstone.babylearn.Configures;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
