@@ -1,15 +1,12 @@
 package com.wingedstone.babylearn;
 
 import java.io.File;
-import java.util.NoSuchElementException;
-import java.util.TreeSet;
 
 import android.content.Context;
 import android.os.Environment;
-import android.util.Log;
 
 public class ResourceFileManager {	
-	static final String RESOURCE_DIRECTORY = "learnres";	
+	static final String RESOURCE_DIRECTORY = Configures.zip_relative_path;	
 		
 	public static ResourceFile getResourceIfExists(String key, Context context) {
 		ResourceFile res_file = null;
@@ -29,8 +26,14 @@ public class ResourceFileManager {
 		return res_file;
 	}
 	
-	public static String getResourceDirectory(String key, Context context) {
+	public static String getResourceDirectory(Context context) {
 		File resource_dir = new File(context.getExternalFilesDir(null), RESOURCE_DIRECTORY);
+		String dir_name = resource_dir.getAbsolutePath() + "/" ;
+		return dir_name;
+	}
+	
+	public static String getCacheDirectory(Context context) {
+		File resource_dir = new File(context.getExternalFilesDir(null), Configures.thumbnails_image_relative_path);
 		String dir_name = resource_dir.getAbsolutePath() + "/" ;
 		return dir_name;
 	}

@@ -16,10 +16,13 @@
         android:layout_centerHorizontal="true"
         android:adjustViewBounds="true"
         android:background="@drawable/share_photo_bg"
-        android:padding="12dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
          />
     <ImageButton
-        android:id="@+id/share"
+        android:id="@+id/share_weibo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -27,7 +30,37 @@
         android:layout_centerHorizontal="true"
         android:background="@null"
         android:layout_above="@id/preview_picture"
-        android:src="@drawable/share_button"
+        android:src="@drawable/share_weibo"
+        android:visibility="invisible"
+        />
+
+    
+    <Button
+        android:id="@+id/share_wechat_session"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="48dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginBottom="-24dp"
+        android:layout_alignParentBottom="true"
+        android:background="@null"
+        android:drawableTop="@drawable/share_wechat_session"
+        android:visibility="invisible"
+         />
+ 
+    <Button
+        android:id="@+id/share_wechat_timeline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="48dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginBottom="-24dp"
+        android:background="@null"
+        android:drawableTop="@drawable/share_wechat_timeline"
+        android:visibility="invisible"
         />
 
 </RelativeLayout>

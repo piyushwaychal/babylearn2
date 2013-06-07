@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -19,8 +17,6 @@ import java.util.zip.ZipFile;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -54,7 +50,6 @@ public class ResourceFile extends ZipFile{
 	private String m_key = "";
 	private Context m_context = null;
 	
-	private boolean m_prepared = false;
 	private boolean m_slides_prepared = false;
 	private boolean m_cover_prepared = false;
 	
@@ -182,49 +177,48 @@ public class ResourceFile extends ZipFile{
 	/*
 	 * prepare the files into memory
 	 */
-	public boolean prepare() {
-		if (!this.isValidResourceZip()) {
-			return false;
-		}
-		// read animation frames into memory
-		for (Iterator<String> iter = m_animations.iterator(); iter.hasNext(); ) {
-			String entry_name = iter.next();
-			try {
-				InputStream ins = this.getInputStream(this.getEntry(entry_name));
-				Bitmap bm = BitmapFactory.decodeStream(ins, null, m_options);
-				m_animation_bitmaps.add(bm);
-			}
-			catch (Exception e) {
-				return false;
-			}	
-		}
-		// read step pictures into memory
-		for (Iterator<String> iter = m_step_pictures.iterator(); iter.hasNext();) {
-			String entry_name = iter.next();
-			try {
-				InputStream ins = this.getInputStream(this.getEntry(entry_name));
-				Bitmap bm = BitmapFactory.decodeStream(ins, null, m_options);
-				m_step_picture_bitmaps.add(bm);
-			}
-			catch (Exception e) {
-				return false;
-			}	
-		}
-		// read sound into temp file
-		try {
-			InputStream ins = this.getInputStream(this.getEntry(m_sound));
-			File tempFile = new File(m_context.getExternalFilesDir(null), "sound.wav");
-			Log.v("zhangge", tempFile.getAbsolutePath());
-	        FileOutputStream out = new FileOutputStream(tempFile, false);
-	        copy(ins, out);
-	        out.close();
-		}
-		catch (IOException e){
-			return false;
-		}
-		m_prepared = true;
-		return true;  
-	}
+//	public boolean prepare() {
+//		if (!this.isValidResourceZip()) {
+//			return false;
+//		}
+//		// read animation frames into memory
+//		for (Iterator<String> iter = m_animations.iterator(); iter.hasNext(); ) {
+//			String entry_name = iter.next();
+//			try {
+//				InputStream ins = this.getInputStream(this.getEntry(entry_name));
+//				Bitmap bm = BitmapFactory.decodeStream(ins, null, m_options);
+//				m_animation_bitmaps.add(bm);
+//			}
+//			catch (Exception e) {
+//				return false;
+//			}	
+//		}
+//		// read step pictures into memory
+//		for (Iterator<String> iter = m_step_pictures.iterator(); iter.hasNext();) {
+//			String entry_name = iter.next();
+//			try {
+//				InputStream ins = this.getInputStream(this.getEntry(entry_name));
+//				Bitmap bm = BitmapFactory.decodeStream(ins, null, m_options);
+//				m_step_picture_bitmaps.add(bm);
+//			}
+//			catch (Exception e) {
+//				return false;
+//			}	
+//		}
+//		// read sound into temp file
+//		try {
+//			InputStream ins = this.getInputStream(this.getEntry(m_sound));
+//			File tempFile = new File(m_context.getExternalFilesDir(null), "sound.wav");
+//			Log.v("zhangge", tempFile.getAbsolutePath());
+//	        FileOutputStream out = new FileOutputStream(tempFile, false);
+//	        copy(ins, out);
+//	        out.close();
+//		}
+//		catch (IOException e){
+//			return false;
+//		}
+//		return true;  
+//	}
 	
 
 	
@@ -235,7 +229,6 @@ public class ResourceFile extends ZipFile{
 		m_animation_bitmaps = new ArrayList<Bitmap>();
 		m_step_picture_bitmaps = new ArrayList<Bitmap>();
 		m_sound = null;
-		m_prepared = false;
 		m_options = new BitmapFactory.Options();
 		m_options.inScaled = true;
 		m_options.inPurgeable = true;

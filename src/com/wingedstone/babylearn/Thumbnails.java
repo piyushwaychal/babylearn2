@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.os.AsyncTask;
-
 public class Thumbnails {
 	static final int R_SUCCESS = 0x819;
 	static final int R_JSON_PARSE_ERROR = 0x820;
@@ -40,7 +38,6 @@ public class Thumbnails {
 				
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			
 		}
 	}

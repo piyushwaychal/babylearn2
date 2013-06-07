@@ -2,41 +2,26 @@ package com.wingedstone.babylearn;
 
 import java.io.File;
 
-import com.tencent.mm.sdk.openapi.BaseReq;
-import com.tencent.mm.sdk.openapi.BaseResp;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.bladefury.sharekit.ShareManager;
+import com.bladefury.sharekit.SupportFragmentActivity;
+import com.bladefury.sharekit.impl_interface.IShareInstance;
 import com.viewpagerindicator.LinePageIndicator;
-import com.viewpagerindicator.UnderlinePageIndicator;
-import com.wingedstone.babylearn.sharekit.ShareKit;
 
-import android.R.integer;
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageSwitcher;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewSwitcher.ViewFactory;
 
-public class SlidePictureActivity extends FragmentActivity{
+public class SlidePictureActivity extends SupportFragmentActivity {
 	
 	// view container
 	private ViewPager m_view_pager;
@@ -47,21 +32,27 @@ public class SlidePictureActivity extends FragmentActivity{
 	private boolean m_is_callback_from_camera = false;
 	private Uri m_picture_uri;
 	private String m_picture_path;
-	private String m_title;
-	public ShareKit m_share_kit;
 	
 	@Override
 	public void onCreate(Bundle saved_instance_state) {
 		super.onCreate(saved_instance_state);
-		//getActionBar().setTitle()
 		ActionBar ab = getActionBar();
-		ab.setLogo(R.drawable.ic_action_back);
-		ab.setCustomView(R.layout.actionbar_slide);
+		ab.setCustomView(R.layout.actionbar_title_and_back);
 		ab.setDisplayShowCustomEnabled(true);
 		ab.setDisplayShowTitleEnabled(false);
-		ab.setHomeButtonEnabled(true);
+		ab.setDisplayShowHomeEnabled(false);
+		View ab_root = ab.getCustomView();
+		ImageButton back = (ImageButton) ab_root.findViewById(R.id.action_back);
+		back.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
 		
-		m_share_kit = new ShareKit(this);
+		TextView title = (TextView) ab_root.findViewById(R.id.action_title);
+		title.setText(R.string.slide_activity_title);
+		
 		
 		setContentView(R.layout.activity_pictureslide);
 		m_view_pager = (ViewPager) findViewById(R.id.main_pager);
@@ -76,15 +67,7 @@ public class SlidePictureActivity extends FragmentActivity{
 	}
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.slide, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-	
-	@Override
 	protected void onNewIntent(Intent intent) {
-		// TODO Auto-generated method stub
 		super.onNewIntent(intent);
 		setIntent(intent);
 		dispatchIntent();
@@ -92,7 +75,6 @@ public class SlidePictureActivity extends FragmentActivity{
 
 	private void dispatchIntent() {
 		Intent intent = getIntent();
-		m_share_kit.handleCallbackIntent(intent);
 		String key = intent.getStringExtra(Configures.intent_key_name);
 		if (key != null) {
 			m_load_task = new LoadResourceTask();
@@ -100,38 +82,9 @@ public class SlidePictureActivity extends FragmentActivity{
 		}
 	}
 	
-//	public void shareToWeibo(Bitmap bm) {
-//		ImageObject imageObject = new ImageObject();
-//		imageObject.setImageObject(bm);
-//		// 初始化微博的分享消息
-//		WeiboMessage weiboMessage = new WeiboMessage();
-//		// 图片消息
-//		weiboMessage.mediaObject = imageObject;
-//		// 初始化从三方到微博的消息请求
-//		SendMessageToWeiboRequest req = new SendMessageToWeiboRequest();
-//		req.transaction = String.valueOf(System.currentTimeMillis());// 用transaction唯一标识一个请求
-//		req.message = weiboMessage;
-//		// 发送请求消息到微博
-//		m_weibo_api.sendRequest(this, req);
-//	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			finish();
-			return true;
-		case R.id.action_share:
-			Toast.makeText(this, getResources().getString(R.string.share_not_available), Toast.LENGTH_LONG).show();			
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		m_share_kit.handleCallbackIntent(requestCode, resultCode, data);
 		if (requestCode == Configures.start_camera_request_code) {
 			if (resultCode == RESULT_OK) {
 				// camera returned picture
@@ -154,10 +107,7 @@ public class SlidePictureActivity extends FragmentActivity{
 			String[] paths = {m_picture_path};
 			MediaScannerConnection.scanFile(this, paths,
 					null, null);
-			Toast.makeText(this,
-					getResources().getString(R.string.save_photo_success), 
-					Toast.LENGTH_LONG)
-					.show();
+			
 		}
 	}
 	
@@ -210,6 +160,44 @@ public class SlidePictureActivity extends FragmentActivity{
 		protected void onPreExecute() {
 			m_load_task = this;
 		}		
+	}
+
+	@Override
+	public void onSuccess(int ins) {
+		Toast.makeText(SlidePictureActivity.this, 
+				getResources().getString(R.string.errcode_success), 
+				Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onFail(int ins, int reason) {
+		switch (reason) {
+		case IShareInstance.ShareCallbackHandler.REASON_USER_CANCEL:
+			// do nothing
+			break;
+
+		default:
+			Toast.makeText(SlidePictureActivity.this, 
+					getResources().getString(R.string.errcode_unknown), 
+					Toast.LENGTH_SHORT).show();
+			break;
+		}
+	}
+
+
+	@Override
+	protected String getWeiboKey() {
+		return Configures.weibo_appkey;
+	}
+
+	@Override
+	protected String getWeiboRedirectUrl() {
+		return Configures.weibo_redirect_url;
+	}
+
+	@Override
+	protected String getWechatKey() {
+		return Configures.wechat_appkey;
 	}
 
 }

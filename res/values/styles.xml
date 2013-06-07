@@ -16,12 +16,15 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:actionMenuTextColor">#F0F0F0</item>
     </style>
     
     <!-- ActionBar style -->
     <style name="MyActionBar" parent="@android:style/Widget.Holo.ActionBar">
         <item name="android:background">#58A7D8</item>
         <item name="android:titleTextStyle">@style/MyActionBarTitle</item>
+        <item name="android:subtitleTextStyle">@style/MyActionBarSubTitle</item>
+        
 
     </style>
     
@@ -34,6 +37,10 @@
         <item name="android:shadowRadius">2</item>
         <item name="android:shadowDy">1</item>
         -->
+    </style>
+    
+    <style name="MyActionBarSubTitle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Subtitle">
+        <item name="android:textColor">#F0F0F0</item>
     </style>
 
 </resources>  

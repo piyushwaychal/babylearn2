@@ -9,19 +9,15 @@ import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.TextView;
-import android.widget.Toast;
+
 public class GridChooseActivity extends Activity implements AdapterView.OnItemClickListener{
 
 	private GridChooseAdapter m_adapter;
@@ -88,7 +84,8 @@ public class GridChooseActivity extends Activity implements AdapterView.OnItemCl
 			finish();
 			return true;
 		case R.id.action_settings:
-			Toast.makeText(this, getResources().getString(R.string.settings_not_available), Toast.LENGTH_LONG).show();
+			Intent i = new Intent(this, SettingsActivity.class);
+			startActivity(i);
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -116,7 +113,6 @@ public class GridChooseActivity extends Activity implements AdapterView.OnItemCl
 				Utils.makeToastAboutNetworkError(GridChooseActivity.this);
 			} else {
 				MyApplication app = (MyApplication)getApplicationContext();
-				int cur_position = app.m_thumbnails.getItemCount();
 				app.m_thumbnails.addThumbnailsFromJson(response);
 				GridChooseActivity.this.m_grid_view.onRefreshComplete();
 				GridChooseActivity.this.m_adapter.notifyDataSetChanged();

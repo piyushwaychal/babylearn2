@@ -25,7 +25,6 @@ public class SlidePicturePagerAdapter extends FragmentStatePagerAdapter {
 
 	@Override
 	public Fragment getItem(int arg0) {
-		// TODO Auto-generated method stub
 		if (m_bm_list != null && arg0 <= m_bm_list.size()) {
 			if(arg0 == m_bm_list.size()) {
 				if (m_last_fragment == null) {
@@ -40,7 +39,6 @@ public class SlidePicturePagerAdapter extends FragmentStatePagerAdapter {
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		if (m_bm_list == null) {
 			return 0;
 		}

@@ -18,7 +18,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
-import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,7 +37,6 @@ public class CoverActivity extends Activity implements OnClickListener {
 	private ChangeResourceTask m_change_task = null;
 	private ResourceFile m_resource_file = null;
 	private MediaPlayer m_sound_player = null;
-	private String m_title;
 	
 	private ImageView m_download_animation;
 	
@@ -206,7 +204,7 @@ public class CoverActivity extends Activity implements OnClickListener {
 				// download this zipfile
 				try {
 		            URL url = new URL(Configures.GetZipUrl(zip_id[0]));
-		            String resource_dir_name = ResourceFileManager.getResourceDirectory(zip_id[0], CoverActivity.this);
+		            String resource_dir_name = ResourceFileManager.getResourceDirectory( CoverActivity.this);
 		            String tmp_file_name = resource_dir_name + zip_id[0] + ".tmp";
 		            String final_file_name = resource_dir_name + zip_id[0] + ".zip";
 		            URLConnection connection = url.openConnection();
