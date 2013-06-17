@@ -172,7 +172,7 @@ public class SlidePictureActivity extends SupportFragmentActivity {
 	@Override
 	public void onFail(int ins, int reason) {
 		switch (reason) {
-		case IShareInstance.ShareCallbackHandler.REASON_USER_CANCEL:
+		case ShareManager.REASON_USER_CANCEL:
 			// do nothing
 			break;
 

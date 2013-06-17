@@ -42,6 +42,7 @@ public class Thumbnails {
 		}
 	}
 	
+	
 	public int getItemCount() {
 		return m_items.size();
 	}
